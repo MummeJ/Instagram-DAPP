@@ -8,6 +8,25 @@ import Main from './Main'
 
 
 class App extends Component {
+  async componentWillMount(){
+    await this.loadWeb3();
+    await this.loadBlockChainData();
+  }
+
+  async loadWeb3() {
+    if (window.ethereum) {
+      await window.ethereum.request({method: 'eth_requestAccounts'});
+      window.web3 = new Web3(window.ethereum);
+      return true;
+    }
+    return false;
+  }
+
+  async loadBlockChainData(){
+    const web3 = window.web3
+    const accounts = await web3.eth.getAccounts()
+    this.setState({ account: accounts[0] })
+  }
 
   constructor(props) {
     super(props)
